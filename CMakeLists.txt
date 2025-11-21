@@ -44,6 +44,13 @@ target_compile_options(shaders_learning PRIVATE
 target_link_options(shaders_learning PRIVATE
     $<$<CONFIG:Debug>:-fsanitize=address,undefined>
 )
+target_include_directories(shaders_learning PRIVATE include)
 target_sources(shaders_learning PRIVATE
+  src/glfw_wrapper.cc
   src/main.cc
+)
+
+file(
+  COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+  DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
