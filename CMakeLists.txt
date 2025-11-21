@@ -27,7 +27,23 @@ target_link_libraries(shaders_learning PRIVATE
   OpenGL::GL
 )
 
-target_compile_options(shaders_learning PRIVATE -Wall -Werror -Wpedantic)
+target_compile_options(shaders_learning PRIVATE 
+  -Wall 
+  -Wextra 
+  -Wnon-virtual-dtor 
+  -Wcast-align 
+  -Wold-style-cast 
+  -Wconversion 
+  -Wsign-conversion 
+  -Werror 
+  -Wpedantic
+  $<$<CONFIG:Debug>:-fsanitize=address,undefined>
+  $<$<CONFIG:Debug>:-g>
+  $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
+)
+target_link_options(shaders_learning PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address,undefined>
+)
 target_sources(shaders_learning PRIVATE
   src/main.cc
 )

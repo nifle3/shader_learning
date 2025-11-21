@@ -1,13 +1,25 @@
 #define GLFW_INCLUDE_NONE
-
 #include <GLFW/glfw3.h>
 #include <cstdlib>
+#include <format>
 #include <glad/glad.h>
 #include <iostream>
 
-auto do_main_loop() noexcept -> int {
+void error_callback(int err, const char *msg) noexcept {
+  std::cerr << std::format("error code {}\nmessage {}", err, msg) << std::endl;
+}
+
+void key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
+                  int action, [[maybe_unused]] int mods) {
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, GLFW_TRUE);
+  }
+}
+
+auto setup_glfw() noexcept -> int {
+  glfwSetErrorCallback(error_callback);
+
   if (!glfwInit()) {
-    std::cerr << "GLFW init failed\n";
     return -1;
   }
 
@@ -19,39 +31,33 @@ auto do_main_loop() noexcept -> int {
   auto window =
       glfwCreateWindow(1280, 720, "GLFW + Modern C++", nullptr, nullptr);
   if (!window) {
-    std::cerr << "Failed to create GLFW window\n";
     return -1;
   }
 
+  glfwSetKeyCallback(window, key_callback);
   glfwMakeContextCurrent(window);
+
+  if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+    std::cerr << "Failed to initialize GLAD" << std::endl;
+    return -1;
+  }
+
   glfwSwapInterval(1);
-  auto red = 1.0f;
-  auto blue = 4.0f;
-  auto green = 6.0f;
 
   while (!glfwWindowShouldClose(window)) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-      glfwSetWindowShouldClose(window, GLFW_TRUE);
-    auto r = std::div(red, 255);
-    auto g = std::div(green, 255);
-    auto b = std::div(blue, 255);
-
-    glClearColor(r.rem / 255.0f, g.rem / 255.0f, b.rem / 255.0f, 1.0f);
+    glClearColor(1, 1, 1, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
-    red++;
-    blue++;
-    green++;
   }
 
   glfwDestroyWindow(window);
   return 0;
 }
 
-int main() {
-  auto status_code = do_main_loop();
+auto main() -> int {
+  auto status_code = setup_glfw();
   glfwTerminate();
   return status_code;
 }
