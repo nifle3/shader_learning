@@ -50,3 +50,29 @@ auto GLProgram::create(const std::string &vertex, const std::string &fragment)
   LOG_INFO("Program created");
   return GLProgram(program);
 }
+
+GLVBO::~GLVBO() {
+  if (this->object != 0) {
+    LOG_INFO(std::format("delete vbo {}", this->object));
+    glDeleteBuffers(1, &this->object);
+  }
+}
+
+auto GLVBO::create() -> GLVBO {
+  GLuint vbo;
+  glGenBuffers(1, &vbo);
+  return GLVBO(vbo);
+}
+
+GLVAO::~GLVAO() {
+  if (this->object != 0) {
+    LOG_INFO(std::format("delete vao {}", this->object));
+    glDeleteVertexArrays(1, &this->object);
+  }
+}
+
+auto GLVAO::create() -> GLVAO {
+  GLuint vao;
+  glGenVertexArrays(1, &vao);
+  return GLVAO(vao);
+}

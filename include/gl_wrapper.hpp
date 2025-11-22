@@ -58,3 +58,21 @@ public:
   static auto create(const std::string &vert, const std::string &fragment)
       -> GLProgram;
 };
+
+class GLVBO : public GLObject {
+private:
+  GLVBO(GLuint id) : GLObject(id) {}
+
+public:
+  ~GLVBO();
+  static auto create() -> GLVBO;
+};
+
+class GLVAO : public GLObject {
+private:
+  GLVAO(GLuint id) : GLObject(id) {}
+
+public:
+  ~GLVAO();
+  static auto create() -> GLVAO;
+};
