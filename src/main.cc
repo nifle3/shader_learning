@@ -1,3 +1,4 @@
+#include "gl_wrapper.hpp"
 #include "glfw_wrapper.hpp"
 #define GLFW_INCLUDE_NONE
 
@@ -13,16 +14,6 @@
 
 namespace fs = std::filesystem;
 
-struct TextShaders {
-  std::string vertex;
-  std::string fragment;
-};
-
-struct CompiledShaders {
-  GLuint vertex;
-  GLuint fragment;
-};
-
 template <int type>
   requires(type == GL_VERTEX_SHADER || type == GL_FRAGMENT_SHADER)
 auto compile_shader(const std::string &text_shader) -> GLuint {
@@ -32,22 +23,6 @@ auto compile_shader(const std::string &text_shader) -> GLuint {
   glCompileShader(shader);
 
   return shader;
-}
-
-auto compile_shaders(const TextShaders &text_shaders) -> CompiledShaders {
-  const auto compiled_fragment_shader =
-      compile_shader<GL_FRAGMENT_SHADER>(text_shaders.fragment);
-  const auto compiled_vertex_shader =
-      compile_shader<GL_VERTEX_SHADER>(text_shaders.vertex);
-
-  return {compiled_vertex_shader, compiled_fragment_shader};
-}
-
-auto setup_shader_program(const CompiledShaders &compiled_shaders) -> GLuint {
-  const auto program = glCreateProgram();
-  glAttachShader(program, compiled_shaders.vertex);
-  glAttachShader(program, compiled_shaders.fragment);
-  return program;
 }
 
 auto get_shader_from_file(const fs::path &path) -> std::string {
@@ -93,7 +68,7 @@ auto main() -> int {
     auto program = create_glfwprogram();
     const auto shader = get_shaders();
     const auto compiled_shaders = compile_shaders(shader);
-    const auto _ = setup_shader_program(compiled_shaders);
+    const auto _ = GLProgram::create_program(compiled_shaders);
     program.main_loop();
   } catch (int err_status_code) {
     status_code = err_status_code;
