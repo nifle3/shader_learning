@@ -2,8 +2,8 @@
 #include "logs.hpp"
 
 GLShader::~GLShader() {
-  LOG_INFO("delete shader");
   if (this->object != 0) {
+    LOG_INFO(std::format("Delete shader {}", this->object));
     glDeleteShader(this->object);
   }
 }
@@ -15,6 +15,7 @@ GLShader::GLShader(GLShader &&other) : GLObject(other.object) {
 GLShader &GLShader::operator=(GLShader &&other) noexcept {
   if (this != &other) {
     if (this->object != 0) {
+      LOG_INFO(std::format("Delete shader {}", this->object));
       glDeleteShader(this->object);
     }
 
@@ -26,8 +27,8 @@ GLShader &GLShader::operator=(GLShader &&other) noexcept {
 }
 
 GLProgram::~GLProgram() {
-  LOG_INFO("delete program");
   if (this->object != 0) {
+    LOG_INFO(std::format("Delete program {}", this->object));
     glDeleteProgram(this->object);
   }
 }
@@ -39,6 +40,7 @@ GLProgram::GLProgram(GLProgram &&other) : GLObject(other.object) {
 GLProgram &GLProgram::operator=(GLProgram &&other) noexcept {
   if (this != &other) {
     if (this->object != 0) {
+      LOG_INFO(std::format("Delete program {}", this->object));
       glDeleteShader(this->object);
     }
 

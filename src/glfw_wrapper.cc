@@ -1,6 +1,7 @@
 #include <format>
 #include <iostream>
 
+#include "gl_wrapper.hpp"
 #include "glfw_wrapper.hpp"
 
 #include <GLFW/glfw3.h>
@@ -55,10 +56,12 @@ auto create_glfwprogram() -> GLFWProgram {
   return GLFWProgram(std::move(window));
 }
 
-auto GLFWProgram::main_loop() -> void {
+auto GLFWProgram::main_loop(GLProgram &&program) -> void {
   while (!glfwWindowShouldClose(this->window.get())) {
     glClearColor(1, 1, 1, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(*program);
 
     glfwSwapBuffers(this->window.get());
     glfwPollEvents();

@@ -1,13 +1,9 @@
 #include "gl_wrapper.hpp"
 #include "glfw_wrapper.hpp"
-#define GLFW_INCLUDE_NONE
 
-#include <GLFW/glfw3.h>
-#include <cstdlib>
 #include <filesystem>
 #include <format>
 #include <fstream>
-#include <glad/glad.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -68,8 +64,8 @@ auto main() -> int {
     auto program = create_glfwprogram();
     const auto shader = get_shaders();
     const auto compiled_shaders = compile_shaders(shader);
-    const auto _ = GLProgram::create_program(compiled_shaders);
-    program.main_loop();
+    auto gl_program = GLProgram::create_program(compiled_shaders);
+    program.main_loop(std::move(gl_program));
   } catch (int err_status_code) {
     status_code = err_status_code;
   } catch (const std::string &err) {

@@ -5,6 +5,8 @@
 
 #include <memory>
 
+#include "gl_wrapper.hpp"
+
 auto delete_glfw_window(GLFWwindow *window) -> void;
 auto error_callback(int err, const char *msg) noexcept -> void;
 auto key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
@@ -20,7 +22,7 @@ public:
       : window(std::move(window)) {}
 
   ~GLFWProgram() { glfwTerminate(); }
-  auto main_loop() -> void;
+  auto main_loop(GLProgram &&program) -> void;
 };
 
 auto create_glfwprogram() -> GLFWProgram;
