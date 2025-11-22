@@ -10,7 +10,7 @@
       "name": "default",
       "displayName": "default config",
       "description": "Config only for inherit",
-      "generator": "Unix Makefiles",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": {

@@ -1,28 +1,39 @@
 #pragma once
+
+#include <string>
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
-#include <memory>
-
-#include "gl_wrapper.hpp"
-
-auto delete_glfw_window(GLFWwindow *window) -> void;
-auto error_callback(int err, const char *msg) noexcept -> void;
-auto key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
-                  int action, [[maybe_unused]] int mods) noexcept -> void;
-
-class GLFWProgram {
+class Window {
 private:
-  std::unique_ptr<GLFWwindow, decltype(&delete_glfw_window)> window;
+  GLFWwindow *window_;
+
+  Window(GLFWwindow *window) : window_(window) {}
 
 public:
-  GLFWProgram(
-      std::unique_ptr<GLFWwindow, decltype(&delete_glfw_window)> &&window)
-      : window(std::move(window)) {}
+  auto operator*() noexcept -> GLFWwindow *;
+  ~Window();
 
-  ~GLFWProgram() { glfwTerminate(); }
-  auto main_loop(GLProgram &&program) -> void;
+  static auto create(int width, int height, const std::string &name) -> Window;
 };
 
-auto create_glfwprogram() -> GLFWProgram;
+class Program {
+private:
+  Program();
+
+public:
+  ~Program();
+
+  static auto create() -> Program;
+  auto run(const std::string &vertex, const std::string &fragment) const
+      -> void;
+};
+
+auto framebuffer_size_callback([[maybe_unused]] GLFWwindow *window, int width,
+                               int height) -> void;
+
+auto error_callback(int err, const char *msg) noexcept -> void;
+
+auto key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
+                  int action, [[maybe_unused]] int mods) noexcept -> void;

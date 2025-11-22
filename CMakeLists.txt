@@ -55,6 +55,7 @@ target_link_options(shaders_learning PRIVATE
 )
 target_include_directories(shaders_learning PRIVATE include)
 target_sources(shaders_learning PRIVATE
+  src/file_utils.cc
   src/gl_wrapper.cc
   src/glfw_wrapper.cc
   src/main.cc

@@ -11,7 +11,7 @@ protected:
   GLObject(GLuint id) : object(id) {}
 
 public:
-  virtual ~GLObject() = default;
+  virtual ~GLObject() = 0;
 
   constexpr auto operator*() const noexcept -> GLuint { return this->object; }
 };
@@ -24,8 +24,8 @@ public:
   GLShader(const GLShader &other) = delete;
   auto operator=(const GLShader &other) = delete;
 
-  GLShader(GLShader &&other);
-  auto operator=(GLShader &&other) noexcept -> GLShader &;
+  auto operator=(GLShader &&other) = delete;
+  GLShader(GLShader &&other) = delete;
 
   ~GLShader();
 
@@ -42,21 +42,6 @@ public:
   }
 };
 
-struct CompiledShaders {
-  GLShader vertex;
-  GLShader fragment;
-
-  CompiledShaders(GLShader &&v, GLShader &&f) noexcept
-      : vertex(std::move(v)), fragment(std::move(f)) {}
-};
-
-struct TextShaders {
-  std::string vertex;
-  std::string fragment;
-};
-
-auto compile_shaders(const TextShaders &text_shaders) -> CompiledShaders;
-
 class GLProgram : public GLObject {
 private:
   GLProgram(GLuint id) : GLObject(id) {}
@@ -70,12 +55,6 @@ public:
 
   ~GLProgram();
 
-  static auto create_program(const CompiledShaders &compiled_shaders)
-      -> GLProgram {
-    const auto program = glCreateProgram();
-    glAttachShader(program, *compiled_shaders.vertex);
-    glAttachShader(program, *compiled_shaders.fragment);
-    LOG_INFO("Program created");
-    return GLProgram(program);
-  }
+  static auto create(const std::string &vert, const std::string &fragment)
+      -> GLProgram;
 };
