@@ -11,7 +11,7 @@ protected:
   GLObject(GLuint id) : object(id) {}
 
 public:
-  virtual ~GLObject() = 0;
+  virtual ~GLObject() = default;
 
   constexpr auto operator*() const noexcept -> GLuint { return this->object; }
 };

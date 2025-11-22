@@ -20,7 +20,7 @@ public:
 
 class Program {
 private:
-  Program();
+  Program() = default;
 
 public:
   ~Program();
