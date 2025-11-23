@@ -47,6 +47,15 @@ auto GLProgram::create(const std::string &vertex, const std::string &fragment)
   glAttachShader(program, *fragment_shader);
   glAttachShader(program, *vertex_shader);
   glLinkProgram(program);
+
+  int success{1};
+  char err[512] = {};
+
+  if (!success) {
+    glGetProgramInfoLog(program, 512, NULL, err);
+    throw std::string(err);
+  }
+
   LOG_INFO("Program created");
   return GLProgram(program);
 }
@@ -75,4 +84,17 @@ auto GLVAO::create() -> GLVAO {
   GLuint vao;
   glGenVertexArrays(1, &vao);
   return GLVAO(vao);
+}
+
+auto GLEBO::create() -> GLEBO {
+  GLuint ebo;
+  glGenBuffers(1, &ebo);
+  return GLEBO(ebo);
+}
+
+GLEBO::~GLEBO() {
+  if (this->object != 0) {
+    LOG_INFO(std::format("delete ebo {}", this->object));
+    glDeleteBuffers(1, &this->object);
+  }
 }

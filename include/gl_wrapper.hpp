@@ -37,7 +37,17 @@ public:
     const auto c_str_text_shader = shader_text.c_str();
     glShaderSource(shader, 1, &c_str_text_shader, nullptr);
     glCompileShader(shader);
-    LOG_INFO("shader compiled");
+
+    char err[512] = {};
+    int success{1};
+
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+      glGetShaderInfoLog(shader, 512, NULL, err);
+      throw std::string(err);
+    }
+
+    LOG_INFO(std::format("shader {} compiled", shader));
     return GLShader(shader);
   }
 };
@@ -75,4 +85,13 @@ private:
 public:
   ~GLVAO();
   static auto create() -> GLVAO;
+};
+
+class GLEBO : public GLObject {
+private:
+  GLEBO(GLuint id) : GLObject(id) {}
+
+public:
+  ~GLEBO();
+  static auto create() -> GLEBO;
 };

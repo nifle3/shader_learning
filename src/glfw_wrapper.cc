@@ -56,16 +56,30 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   glViewport(0, 0, 1280, 720);
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
-  float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
-
+  float vertices[] = {
+      0.5f,  0.5f,  0.0f, // top right
+      0.5f,  -0.5f, 0.0f, // bottom right
+      -0.5f, -0.5f, 0.0f, // bottom left
+      -0.5f, 0.5f,  0.0f  // top left
+  };
+  unsigned int indices[] = {
+      // note that we start from 0!
+      0, 1, 3, // first triangle
+      1, 2, 3  // second triangle
+  };
   auto program = GLProgram::create(vertex, fragment);
-  auto VBO = GLVBO::create();
   auto VAO = GLVAO::create();
+  auto VBO = GLVBO::create();
+  auto EBO = GLEBO::create();
 
   glBindVertexArray(*VAO);
 
   glBindBuffer(GL_ARRAY_BUFFER, *VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+               GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
                         static_cast<void *>(0));
@@ -80,7 +94,7 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
 
     glUseProgram(*program);
     glBindVertexArray(*VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(*window);
     glfwPollEvents();
@@ -99,7 +113,15 @@ auto error_callback(int err, const char *msg) noexcept -> void {
 
 auto key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
                   int action, [[maybe_unused]] int mods) noexcept -> void {
+  static auto is_wireframe = false;
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
+    return;
+  }
+
+  if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+    glPolygonMode(GL_FRONT_AND_BACK, is_wireframe ? GL_FILL : GL_LINE);
+    is_wireframe = !is_wireframe;
+    return;
   }
 }
