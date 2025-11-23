@@ -57,16 +57,21 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
   float vertices[] = {
-      0.5f,  0.5f,  0.0f, // top right
-      0.5f,  -0.5f, 0.0f, // bottom right
-      -0.5f, -0.5f, 0.0f, // bottom left
-      -0.5f, 0.5f,  0.0f  // top left
+      0.0f,  0.0f,  0.0f, // top right
+      0.0f,  -1.0f, 0.0f, // bottom right
+      -1.0f, -1.0f, 0.0f, // bottom left
+      -1.0f, 0.0f,  0.0f  // top left
   };
   unsigned int indices[] = {
       // note that we start from 0!
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
   };
+
+  float vertices2[] = {
+      0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f, 0.0,
+  };
+
   auto program = GLProgram::create(vertex, fragment);
   auto VAO = GLVAO::create();
   auto VBO = GLVBO::create();
@@ -83,9 +88,20 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
                         static_cast<void *>(0));
-  glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glEnableVertexAttribArray(0);
+
+  glBindVertexArray(0);
+
+  auto VAO2 = GLVAO::create();
+  auto VBO2 = GLVBO::create();
+  glBindVertexArray(*VAO2);
+  glBindBuffer(GL_ARRAY_BUFFER, *VBO2);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+                        static_cast<void *>(0));
+  glEnableVertexAttribArray(0);
   glBindVertexArray(0);
 
   while (!glfwWindowShouldClose(*window)) {
@@ -96,6 +112,8 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
     glBindVertexArray(*VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+    glBindVertexArray(*VAO2);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     glfwSwapBuffers(*window);
     glfwPollEvents();
   }
