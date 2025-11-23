@@ -4,9 +4,10 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
+#include "gl_wrapper.hpp"
 #include "logs.hpp"
-#include <gl_wrapper.hpp>
 
 Window::~Window() {
   if (this->window_) {
@@ -57,10 +58,10 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
   float vertices[] = {
-      0.0f,  0.0f,  0.0f, // top right
-      0.0f,  -1.0f, 0.0f, // bottom right
-      -1.0f, -1.0f, 0.0f, // bottom left
-      -1.0f, 0.0f,  0.0f  // top left
+      0.0f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f, // top right
+      0.0f,  -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+      -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+      -1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, // top left
   };
   unsigned int indices[] = {
       // note that we start from 0!
@@ -69,7 +70,9 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   };
 
   float vertices2[] = {
-      0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f, 0.0,
+      0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // center
+      0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // top
+      0.5f, 0.0f, 0.0,  0.0f, 0.0f, 1.0f  // right
   };
 
   auto program = GLProgram::create(vertex, fragment);
@@ -78,42 +81,50 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   auto EBO = GLEBO::create();
 
   glBindVertexArray(*VAO);
-
   glBindBuffer(GL_ARRAY_BUFFER, *VBO);
+
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
                GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                        static_cast<void *>(0));
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+                        (void *)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glEnableVertexAttribArray(0);
-
-  glBindVertexArray(0);
 
   auto VAO2 = GLVAO::create();
   auto VBO2 = GLVBO::create();
   glBindVertexArray(*VAO2);
   glBindBuffer(GL_ARRAY_BUFFER, *VBO2);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                        static_cast<void *>(0));
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
-  glBindVertexArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+                        (void *)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+  int timeUniformLocation = glGetUniformLocation(*program, "time");
 
   while (!glfwWindowShouldClose(*window)) {
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    float timeValue = static_cast<float>(glfwGetTime());
     glUseProgram(*program);
+
+    glUniform1f(timeUniformLocation, timeValue);
     glBindVertexArray(*VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+    glUniform1f(timeUniformLocation, timeValue);
     glBindVertexArray(*VAO2);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
     glfwSwapBuffers(*window);
     glfwPollEvents();
   }

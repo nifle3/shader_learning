@@ -41,9 +41,7 @@ target_compile_options(shaders_learning PRIVATE
   -Wextra 
   -Wnon-virtual-dtor 
   -Wcast-align 
-  -Wold-style-cast 
   -Wconversion 
-  -Wsign-conversion 
   -Werror 
   -Wpedantic
   $<$<CONFIG:Debug>:-fsanitize=address,undefined>
