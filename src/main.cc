@@ -6,6 +6,7 @@
 
 auto main() -> int {
   auto status_code = 0;
+
   try {
     const auto shaders = get_shaders(); // vertex fragment
     const auto program = Program::create();
@@ -19,5 +20,6 @@ auto main() -> int {
     LOG_ERROR("Unexpected error");
     status_code = 1;
   }
+  
   return status_code;
 }

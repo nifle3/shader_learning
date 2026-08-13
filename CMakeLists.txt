@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(glfw)
 add_library(glad STATIC third_party/glad/src/glad.c)
 target_include_directories(glad PUBLIC third_party/glad/include)
 if(UNIX AND NOT APPLE)
-  target_link_libraries(glad PRIVATE dl)
+  target_link_libraries(glad PUBLIC dl)
 endif()
 
 FetchContent_Declare(
