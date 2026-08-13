@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 4.3)
 project(shaders_learning VERSION 0.0.1 LANGUAGES C CXX)
 add_executable(shaders_learning)
 
