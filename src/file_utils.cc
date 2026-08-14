@@ -5,15 +5,16 @@
 #include <sstream>
 #include <tuple>
 
-auto read_file(const fs::path &path) -> std::string {
-  std::ifstream file(path);
-  if (!file) {
-    throw std::format("Cannot open {} file", path.string());
-  }
+auto get_shaders() -> std::tuple<std::string, std::string> {
+  const fs::path base = "./";
+  const auto shader_path = add_path(base, "shaders");
+  const auto vertex_shader_path = add_path(shader_path, "basic.vert");
+  const auto fragment_shader_path = add_path(shader_path, "basic.frag");
 
-  std::ostringstream ss;
-  ss << file.rdbuf();
-  return ss.str();
+  const auto vertex_shader = read_file(vertex_shader_path);
+  const auto fragment_shader = read_file(fragment_shader_path);
+
+  return std::make_tuple(vertex_shader, fragment_shader);
 }
 
 auto add_path(const fs::path &base, std::string_view filename) {
@@ -25,14 +26,13 @@ auto add_path(const fs::path &base, std::string_view filename) {
   return path;
 }
 
-auto get_shaders() -> std::tuple<std::string, std::string> {
-  const fs::path base = "./";
-  const auto shader_path = add_path(base, "shaders");
-  const auto vertex_shader_path = add_path(shader_path, "basic.vert");
-  const auto fragment_shader_path = add_path(shader_path, "basic.frag");
+auto read_file(const fs::path &path) -> std::string {
+  std::ifstream file(path);
+  if (!file) {
+    throw std::format("Cannot open {} file", path.string());
+  }
 
-  const auto vertex_shader = read_file(vertex_shader_path);
-  const auto fragment_shader = read_file(fragment_shader_path);
-
-  return std::make_tuple(vertex_shader, fragment_shader);
+  std::ostringstream ss;
+  ss << file.rdbuf();
+  return ss.str();
 }

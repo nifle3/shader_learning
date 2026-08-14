@@ -73,17 +73,17 @@ auto GLVBO::create() -> GLVBO {
   return GLVBO(vbo);
 }
 
+auto GLVAO::create() -> GLVAO {
+  GLuint vao;
+  glGenVertexArrays(1, &vao);
+  return GLVAO(vao);
+}
+
 GLVAO::~GLVAO() {
   if (this->object != 0) {
     LOG_INFO(std::format("delete vao {}", this->object));
     glDeleteVertexArrays(1, &this->object);
   }
-}
-
-auto GLVAO::create() -> GLVAO {
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  return GLVAO(vao);
 }
 
 auto GLEBO::create() -> GLEBO {

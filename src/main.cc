@@ -8,7 +8,7 @@ auto main() -> int {
   auto status_code = 0;
 
   try {
-    const auto shaders = get_shaders(); // vertex fragment
+    const auto shaders = get_shaders();
     const auto program = Program::create();
     program.run(std::get<0>(shaders), std::get<1>(shaders));
   } catch (int err_status_code) {

@@ -13,6 +13,7 @@ target_link_libraries(shaders_learning PRIVATE
   glad
   glm
   OpenGL::GL
+  imgui
 )
 
 target_compile_options(shaders_learning PRIVATE 
