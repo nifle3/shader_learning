@@ -6,6 +6,7 @@
 - [] Add logging into different locations at the same time
 - [] Add linting
 - [] Fix all sanitaizer error
+- [] Add config file
 
 ## Refactor all code and architecture
 - [] BARBARA LISSKOV WHAT

@@ -1,10 +1,10 @@
 # https://learnopengl.com/Getting-started/OpenGL Progress
 ## Getting started
-- [] OPENGl
-- [] Creating a window
-- [] Hello window
-- [] Hello triangle
-- [] Shaders
+- [x] OPENGl
+- [x] Creating a window
+- [x] Hello window
+- [x] Hello triangle
+- [x] Shaders
 - [] Textures
 - [] Transformations
 - [] Coordinate system
