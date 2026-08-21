@@ -7,6 +7,7 @@ add_subdirectory(third_party/glfw)
 add_subdirectory(third_party/glad)
 add_subdirectory(third_party/glm)
 add_subdirectory(third_party/imgui)
+add_subdirectory(third_party/spdlog)
 
 target_link_libraries(shaders_learning PRIVATE
   glfw
@@ -14,6 +15,7 @@ target_link_libraries(shaders_learning PRIVATE
   glm
   OpenGL::GL
   imgui
+  spdlog::spdlog
 )
 
 target_compile_options(shaders_learning PRIVATE 

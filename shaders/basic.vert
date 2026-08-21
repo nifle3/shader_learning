@@ -11,6 +11,6 @@ void main()
 {
   float delta = sin(time);
 
-    gl_Position = vec4(aPos.x+delta, aPos.y+delta, aPos.z+delta, 1.0);
-    myColor = aColor;
+  gl_Position = vec4(aPos.x+delta, aPos.y+delta, aPos.z+delta, 1.0);
+  myColor = aColor;
 }
