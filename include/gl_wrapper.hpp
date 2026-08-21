@@ -50,15 +50,15 @@ public:
   }
 };
 
-class GlShader : public GLObject {
+class GlProgram : public GLObject {
 private:
-  GlShader(GLuint id) : GLObject(id) {}
+  GlProgram(GLuint id) : GLObject(id) {}
 
 public:
-  GlShader(const GLShader &other) = delete;
+  GlProgram(const GLShader &other) = delete;
   auto operator=(const GLShader &other) = delete;
 
-  GlShader(GlShader &&other);
+  GlProgram(GlShader &&other);
   auto operator=(GlShader &&other) noexcept -> GlShader &;
 
   ~GlShader();
