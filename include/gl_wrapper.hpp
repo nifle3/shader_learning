@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 
 #include <glad/glad.h>
+
+#include "logs.hpp"
 
 class GLObject {
 protected:
@@ -50,21 +53,21 @@ public:
   }
 };
 
-class GlProgram : public GLObject {
+class GLProgram : public GLObject {
 private:
-  GlProgram(GLuint id) : GLObject(id) {}
+  GLProgram(GLuint id) : GLObject(id) {}
 
 public:
-  GlProgram(const GLShader &other) = delete;
+  GLProgram(const GLProgram &other) = delete;
   auto operator=(const GLShader &other) = delete;
 
-  GlProgram(GlShader &&other);
-  auto operator=(GlShader &&other) noexcept -> GlShader &;
+  GLProgram(GLProgram &&other);
+  auto operator=(GLProgram &&other) noexcept -> GLProgram &;
 
-  ~GlShader();
+  ~GLProgram();
 
   static auto create(const std::string &vert, const std::string &fragment)
-      -> GlShader;
+      -> GLProgram;
 };
 
 class GLVBO : public GLObject {

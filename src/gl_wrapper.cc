@@ -1,6 +1,7 @@
 #include <format>
 
 #include "gl_wrapper.hpp"
+#include "logs.hpp"
 
 GLShader::~GLShader() {
   if (this->object != 0) {
@@ -9,18 +10,18 @@ GLShader::~GLShader() {
   }
 }
 
-GLShader::~GLShader() {
+GLProgram::~GLProgram() {
   if (this->object != 0) {
     LOG_INFO(std::format("Delete program {}", this->object));
     glDeleteProgram(this->object);
   }
 }
 
-GLShader::GLShader(GLShader &&other) : GLObject(other.object) {
+GLProgram::GLProgram(GLProgram &&other) : GLObject(other.object) {
   other.object = 0;
 }
 
-GLShader &GLShader::operator=(GLShader &&other) noexcept {
+GLProgram &GLProgram::operator=(GLProgram &&other) noexcept {
   if (this != &other) {
     if (this->object != 0) {
       LOG_INFO(std::format("Delete program {}", this->object));
@@ -34,8 +35,8 @@ GLShader &GLShader::operator=(GLShader &&other) noexcept {
   return *this;
 }
 
-auto GLShader::create(const std::string &vertex, const std::string &fragment)
-    -> GLShader {
+auto GLProgram::create(const std::string &vertex, const std::string &fragment)
+    -> GLProgram {
   const auto vertex_shader =
       GLShader::compile_shader_from_text<GL_VERTEX_SHADER>(vertex);
 
@@ -56,7 +57,7 @@ auto GLShader::create(const std::string &vertex, const std::string &fragment)
   }
 
   LOG_INFO("Program created");
-  return GLShader(program);
+  return GLProgram(program);
 }
 
 GLVBO::~GLVBO() {

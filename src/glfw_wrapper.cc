@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "gl_wrapper.hpp"
+#include "logs.hpp"
 
 Window::~Window() {
   if (this->window_) {
@@ -74,7 +75,7 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
       0.5f, 0.0f, 0.0,  0.0f, 0.0f, 1.0f  // right
   };
 
-  auto program = GLShader::create(vertex, fragment);
+  auto program = GLProgram::create(vertex, fragment);
   auto VAO = GLVAO::create();
   auto VBO = GLVBO::create();
   auto EBO = GLEBO::create();
