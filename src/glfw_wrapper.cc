@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 
 #include "gl_wrapper.hpp"
-#include "logs.hpp"
 
 Window::~Window() {
   if (this->window_) {

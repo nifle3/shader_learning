@@ -3,8 +3,6 @@
 
 #include <glad/glad.h>
 
-#include "logs.hpp"
-
 class GLObject {
 protected:
   GLuint object;

@@ -2,7 +2,6 @@
 
 #include "file_utils.hpp"
 #include "glfw_wrapper.hpp"
-#include "logs.hpp"
 
 auto main() -> int {
   auto status_code = 0;

@@ -1,7 +1,6 @@
 #include <format>
 
 #include "gl_wrapper.hpp"
-#include "logs.hpp"
 
 GLShader::~GLShader() {
   if (this->object != 0) {
