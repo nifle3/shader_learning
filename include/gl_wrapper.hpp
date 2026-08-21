@@ -52,21 +52,21 @@ public:
   }
 };
 
-class GLProgram : public GLObject {
+class GlShader : public GLObject {
 private:
-  GLProgram(GLuint id) : GLObject(id) {}
+  GlShader(GLuint id) : GLObject(id) {}
 
 public:
-  GLProgram(const GLProgram &other) = delete;
+  GlShader(const GLShader &other) = delete;
   auto operator=(const GLShader &other) = delete;
 
-  GLProgram(GLProgram &&other);
-  auto operator=(GLProgram &&other) noexcept -> GLProgram &;
+  GlShader(GlShader &&other);
+  auto operator=(GlShader &&other) noexcept -> GlShader &;
 
-  ~GLProgram();
+  ~GlShader();
 
   static auto create(const std::string &vert, const std::string &fragment)
-      -> GLProgram;
+      -> GlShader;
 };
 
 class GLVBO : public GLObject {
