@@ -17,7 +17,7 @@ auto get_shaders() -> std::tuple<std::string, std::string> {
   return std::make_tuple(vertex_shader, fragment_shader);
 }
 
-auto add_path(const fs::path &base, std::string_view filename) {
+auto add_path(const fs::path &base, std::string_view filename) -> fs::path {
   const auto path = base / filename;
   if (!fs::exists(path)) {
     throw std::format("Path {} is not exists", path.string());
