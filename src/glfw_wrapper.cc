@@ -1,6 +1,7 @@
 #include "glfw_wrapper.hpp"
 
 #include <format>
+#include <tuple>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -28,6 +29,12 @@ auto Window::create(int width, int height, const std::string &name) -> Window {
   return Window(window);
 }
 
+auto Window::get_fbsize_hw() const -> std::tuple<int, int> {
+  int width, heigth;
+  glfwGetFramebufferSize(this->window_, &width, &heigth);
+  return std::make_tuple(width, heigth);
+}
+
 Program::~Program() { glfwTerminate(); }
 
 auto Program::create() -> Program {
@@ -45,6 +52,8 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+  glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, GLFW_TRUE);
 
   auto window = Window::create(1280, 720, "Opengl learning");
 
@@ -54,7 +63,8 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
     throw "Failed to initialize GLAD";
   }
 
-  glViewport(0, 0, 1280, 720);
+  const auto [fbheigth, fbwidth] = window.get_fbsize_hw();
+  glViewport(0, 0, fbheigth, fbwidth);
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
   float vertices[] = {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <tuple>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -16,6 +17,7 @@ public:
   ~Window();
 
   static auto create(int width, int height, const std::string &name) -> Window;
+  auto get_fbsize_hw() const -> std::tuple<int, int>;
 };
 
 class Program {
