@@ -67,6 +67,12 @@ public:
 
   static auto create(const std::string &vert, const std::string &fragment)
       -> GLProgram;
+
+  auto use() const -> void;
+  
+  auto set_bool(const std::string& name, bool value) const -> void;
+  auto set_int(const std::string& name, int value) const -> void;
+  auto set_float(const std::string& name, float value) const -> void;
 };
 
 class GLVBO : public GLObject {

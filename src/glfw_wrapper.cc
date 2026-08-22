@@ -118,7 +118,7 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
                         (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
-  int timeUniformLocation = glGetUniformLocation(*program, "time");
+  const int timeUniformLocation = glGetUniformLocation(*program, "time");
 
   while (!glfwWindowShouldClose(*window)) {
     glClearColor(0, 0, 0, 1.0f);

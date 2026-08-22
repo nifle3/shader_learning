@@ -1,4 +1,5 @@
 #include <spdlog/spdlog.h>
+#include <string_view>
 
 #include "gl_wrapper.hpp"
 
@@ -6,6 +7,7 @@ GLShader::~GLShader() {
   if (this->object != 0) {
     spdlog::info("Delete shader {}", this->object);
     glDeleteShader(this->object);
+    this->object = 0;
   }
 }
 
@@ -13,25 +15,8 @@ GLProgram::~GLProgram() {
   if (this->object != 0) {
     spdlog::info("Delete program {}", this->object);
     glDeleteProgram(this->object);
+    this->object = 0;
   }
-}
-
-GLProgram::GLProgram(GLProgram &&other) : GLObject(other.object) {
-  other.object = 0;
-}
-
-GLProgram &GLProgram::operator=(GLProgram &&other) noexcept {
-  if (this != &other) {
-    if (this->object != 0) {
-      spdlog::info("Delete program {}", this->object);
-      glDeleteShader(this->object);
-    }
-
-    this->object = other.object;
-    other.object = 0;
-  }
-
-  return *this;
 }
 
 auto GLProgram::create(const std::string &vertex, const std::string &fragment)
@@ -59,17 +44,36 @@ auto GLProgram::create(const std::string &vertex, const std::string &fragment)
   return GLProgram(program);
 }
 
-GLVBO::~GLVBO() {
-  if (this->object != 0) {
-    spdlog::info("delete vbo {}", this->object);
-    glDeleteBuffers(1, &this->object);
-  }
+auto GLProgram::use() const -> void {
+  glUseProgram(this->object);
 }
+
+auto GLProgram::set_bool(const std::string& name, bool value) const -> void {
+  glUniform1i(glGetUniformLocation(this->object, name.c_str()), static_cast<int>(value)); 
+}
+
+auto GLProgram::set_int(const std::string& name, int value) const -> void {
+  glUniform1i(glGetUniformLocation(this->object, name.c_str()), value); 
+}
+
+
+auto GLProgram::set_float(const std::string& name, float value) const -> void {
+  glUniform1f(glGetUniformLocation(this->object, name.c_str()), value); 
+}
+
 
 auto GLVBO::create() -> GLVBO {
   GLuint vbo;
   glGenBuffers(1, &vbo);
   return GLVBO(vbo);
+}
+
+GLVBO::~GLVBO() {
+  if (this->object != 0) {
+    spdlog::info("delete vbo {}", this->object);
+    glDeleteBuffers(1, &this->object);
+    this->object = 0;
+  }
 }
 
 auto GLVAO::create() -> GLVAO {
@@ -95,5 +99,6 @@ GLEBO::~GLEBO() {
   if (this->object != 0) {
     spdlog::info("delete ebo {}", this->object);
     glDeleteBuffers(1, &this->object);
+    this->object = 0;
   }
 }
