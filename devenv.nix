@@ -35,7 +35,7 @@
     "debug:setup" = {
       exec = "cmake --preset debug";
       execIfModified = [
-        "CMakeLists.txt"
+        "**/CMakeLists.txt"
         "CMakePresets.json"
       ];
     };
