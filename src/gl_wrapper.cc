@@ -1,18 +1,17 @@
-#include <format>
+#include <spdlog/spdlog.h>
 
 #include "gl_wrapper.hpp"
-#include "logs.hpp"
 
 GLShader::~GLShader() {
   if (this->object != 0) {
-    LOG_INFO(std::format("Delete shader {}", this->object));
+    spdlog::info("Delete shader {}", this->object);
     glDeleteShader(this->object);
   }
 }
 
 GLProgram::~GLProgram() {
   if (this->object != 0) {
-    LOG_INFO(std::format("Delete program {}", this->object));
+    spdlog::info("Delete program {}", this->object);
     glDeleteProgram(this->object);
   }
 }
@@ -24,7 +23,7 @@ GLProgram::GLProgram(GLProgram &&other) : GLObject(other.object) {
 GLProgram &GLProgram::operator=(GLProgram &&other) noexcept {
   if (this != &other) {
     if (this->object != 0) {
-      LOG_INFO(std::format("Delete program {}", this->object));
+      spdlog::info("Delete program {}", this->object);
       glDeleteShader(this->object);
     }
 
@@ -56,13 +55,13 @@ auto GLProgram::create(const std::string &vertex, const std::string &fragment)
     throw std::string(err);
   }
 
-  LOG_INFO("Program created");
+  spdlog::info("Program created");
   return GLProgram(program);
 }
 
 GLVBO::~GLVBO() {
   if (this->object != 0) {
-    LOG_INFO(std::format("delete vbo {}", this->object));
+    spdlog::info("delete vbo {}", this->object);
     glDeleteBuffers(1, &this->object);
   }
 }
@@ -81,7 +80,7 @@ auto GLVAO::create() -> GLVAO {
 
 GLVAO::~GLVAO() {
   if (this->object != 0) {
-    LOG_INFO(std::format("delete vao {}", this->object));
+    spdlog::info("delete vao {}", this->object);
     glDeleteVertexArrays(1, &this->object);
   }
 }
@@ -94,7 +93,7 @@ auto GLEBO::create() -> GLEBO {
 
 GLEBO::~GLEBO() {
   if (this->object != 0) {
-    LOG_INFO(std::format("delete ebo {}", this->object));
+    spdlog::info("delete ebo {}", this->object);
     glDeleteBuffers(1, &this->object);
   }
 }

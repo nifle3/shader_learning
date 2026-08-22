@@ -3,8 +3,7 @@
 #include <string>
 
 #include <glad/glad.h>
-
-#include "logs.hpp"
+#include <spdlog/spdlog.h>
 
 class GLObject {
 protected:
@@ -48,7 +47,7 @@ public:
       throw std::string(err);
     }
 
-    LOG_INFO(std::format("shader {} compiled", shader));
+    spdlog::info("shader {} compiled", shader);
     return GLShader(shader);
   }
 };

@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <spdlog/spdlog.h>
 
 #include "gl_wrapper.hpp"
-#include "logs.hpp"
 
 Window::~Window() {
   if (this->window_) {
@@ -133,11 +133,11 @@ auto Program::run(const std::string &vertex, const std::string &fragment) const
 auto framebuffer_size_callback([[maybe_unused]] GLFWwindow *window, int width,
                                int height) -> void {
   glViewport(0, 0, width, height);
-  LOG_DEBUG("Change viewport");
+  spdlog::debug("Change viewport");
 }
 
 auto error_callback(int err, const char *msg) noexcept -> void {
-  LOG_ERROR(std::format("error code {}\nmessage {}", err, msg));
+  spdlog::error("error code {}\nmessage {}", err, msg);
 }
 
 auto key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode,
